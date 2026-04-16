@@ -1,8 +1,7 @@
-// src/pages/SignupPage.jsx
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle, GraduationCap } from 'lucide-react';
 
 const SignupPage = () => {
   const [fullName, setFullName] = useState('');
@@ -43,15 +42,15 @@ const SignupPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center py-12 px-4 pt-20">
         <div className="max-w-md w-full text-center">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+          <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-8">
+            <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Account Created!</h2>
-            <p className="text-slate-600 mb-4">
+            <h2 className="text-2xl font-bold text-white mb-2">Account Created!</h2>
+            <p className="text-slate-400 mb-4">
               Welcome to Dalal Classes, {fullName}! Redirecting you shortly...
             </p>
-            <div className="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full mx-auto"></div>
+            <div className="w-8 h-8 border-4 border-accent-violet/30 border-t-accent-violet rounded-full animate-spin mx-auto"></div>
           </div>
         </div>
       </div>
@@ -60,73 +59,78 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 pt-20">
-      <div className="max-w-md w-full">
+      <div className="absolute inset-0 bg-gradient-to-br from-accent-violet/10 via-transparent to-accent-cyan/10"></div>
+      
+      <div className="relative max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h1>
-          <p className="text-slate-600">Start your learning journey today</p>
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-accent-violet to-accent-cyan rounded-2xl mb-4">
+            <GraduationCap className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
+          <p className="text-slate-400">Start your learning journey today - it's free!</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-8">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
-              <p className="text-red-700 text-sm">{error}</p>
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+              <p className="text-red-400 text-sm">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-300 mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Enter your full name"
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-dark-bg/50 border border-dark-border rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent-violet focus:border-transparent transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-300 mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-dark-bg/50 border border-dark-border rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent-violet focus:border-transparent transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-300 mb-2">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a password (min 6 chars)"
                   required
-                  className="w-full pl-12 pr-12 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-12 py-3 bg-dark-bg/50 border border-dark-border rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent-violet focus:border-transparent transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -136,22 +140,29 @@ const SignupPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-navy hover:bg-slate-800 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-gradient-to-r from-accent-violet to-accent-cyan text-white font-semibold rounded-xl hover:shadow-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  Creating Account...
+                </span>
+              ) : (
+                'Create Account - Free'
+              )}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-slate-600">
+            <p className="text-slate-400">
               Already have an account?{' '}
-              <Link to="/login" className="text-amber-600 font-semibold hover:text-amber-700">
+              <Link to="/login" className="text-accent-violet font-semibold hover:text-accent-cyan transition-colors">
                 Sign In
               </Link>
             </p>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-slate-100">
+          <div className="mt-6 pt-6 border-t border-dark-border">
             <p className="text-xs text-slate-500 text-center">
               By signing up, you agree to our Terms of Service and Privacy Policy
             </p>

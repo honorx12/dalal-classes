@@ -1,5 +1,5 @@
 -- Dalal Classes Database Schema
--- This file is for reference only - database is already set up
+-- All courses are FREE - No payment/purchase required
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -9,21 +9,22 @@ CREATE TABLE IF NOT EXISTS profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   full_name TEXT,
   avatar_url TEXT,
+  is_admin BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Courses table
+-- Courses table (all courses are FREE)
 CREATE TABLE IF NOT EXISTS courses (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   title TEXT NOT NULL,
   description TEXT,
-  price INTEGER NOT NULL,
+  price INTEGER DEFAULT 0,
   thumbnail TEXT,
   level TEXT DEFAULT 'Beginner',
   duration TEXT,
   instructor TEXT,
-  gradient TEXT DEFAULT 'from-blue-500 to-purple-600',
+  gradient TEXT DEFAULT 'from-accent-violet to-accent-cyan',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS modules (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Enrollments table
+-- Enrollments table (instant, free enrollment)
 CREATE TABLE IF NOT EXISTS enrollments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
@@ -60,19 +61,6 @@ CREATE TABLE IF NOT EXISTS enrollments (
   enrolled_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   completed_at TIMESTAMP WITH TIME ZONE,
   UNIQUE(user_id, course_id)
-);
-
--- Payments table
-CREATE TABLE IF NOT EXISTS payments (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  course_id UUID REFERENCES courses(id) ON DELETE CASCADE NOT NULL,
-  razorpay_payment_id TEXT UNIQUE NOT NULL,
-  razorpay_order_id TEXT UNIQUE NOT NULL,
-  razorpay_signature TEXT,
-  amount INTEGER NOT NULL,
-  status TEXT DEFAULT 'pending',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Progress table (module-level tracking)
@@ -85,18 +73,54 @@ CREATE TABLE IF NOT EXISTS progress (
   UNIQUE(user_id, module_id)
 );
 
+-- Quizzes table
+CREATE TABLE IF NOT EXISTS quizzes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  chapter_id UUID REFERENCES chapters(id) ON DELETE CASCADE NOT NULL,
+  course_id UUID REFERENCES courses(id) ON DELETE CASCADE NOT NULL,
+  questions JSONB DEFAULT '[]',
+  passing_score INTEGER DEFAULT 60,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Quiz attempts table (enforces 24hr cooldown)
+CREATE TABLE IF NOT EXISTS quiz_attempts (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  quiz_id UUID REFERENCES quizzes(id) ON DELETE CASCADE NOT NULL,
+  chapter_id UUID REFERENCES chapters(id) ON DELETE CASCADE NOT NULL,
+  score INTEGER NOT NULL,
+  passed BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Certificates table
+CREATE TABLE IF NOT EXISTS certificates (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  course_id UUID REFERENCES courses(id) ON DELETE CASCADE NOT NULL,
+  certificate_id TEXT UNIQUE NOT NULL,
+  issued_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, course_id)
+);
+
 -- Row Level Security Policies
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE courses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chapters ENABLE ROW LEVEL SECURITY;
 ALTER TABLE modules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enrollments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE quizzes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE quiz_attempts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE certificates ENABLE ROW LEVEL SECURITY;
 
--- Profiles: Users can read/update their own profile
+-- Profiles: Users can read/update their own profile, admins can read all
 CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
 CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Admins can view all profiles" ON profiles FOR SELECT USING (
+  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = TRUE)
+);
 
 -- Courses: Everyone can read courses
 CREATE POLICY "Everyone can view courses" ON courses FOR SELECT USING (true);
@@ -110,16 +134,26 @@ CREATE POLICY "Everyone can view modules" ON modules FOR SELECT USING (true);
 -- Enrollments: Users can manage their own enrollments
 CREATE POLICY "Users can view own enrollments" ON enrollments FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can create own enrollments" ON enrollments FOR INSERT WITH CHECK (auth.uid() = user_id);
-
--- Payments: Users can view their own payments
-CREATE POLICY "Users can view own payments" ON payments FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Service can create payments" ON payments FOR INSERT WITH CHECK (true);
+CREATE POLICY "Users can update own enrollments" ON enrollments FOR UPDATE USING (auth.uid() = user_id);
 
 -- Progress: Users can manage their own progress
 CREATE POLICY "Users can view own progress" ON progress FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can manage own progress" ON progress FOR ALL USING (auth.uid() = user_id);
 
+-- Quizzes: Everyone can read quizzes
+CREATE POLICY "Everyone can view quizzes" ON quizzes FOR SELECT USING (true);
+
+-- Quiz attempts: Users can manage their own attempts
+CREATE POLICY "Users can view own quiz attempts" ON quiz_attempts FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can create own quiz attempts" ON quiz_attempts FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Certificates: Users can view their own
+CREATE POLICY "Users can view own certificates" ON certificates FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can create own certificates" ON certificates FOR INSERT WITH CHECK (auth.uid() = user_id);
+
 -- Functions
+
+-- Create profile on new user signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -160,3 +194,12 @@ BEGIN
   RETURN ROUND((completed_modules::NUMERIC / total_modules) * 100);
 END;
 $$ LANGUAGE plpgsql;
+
+-- Seed courses (all FREE)
+INSERT INTO courses (id, title, description, price, level, duration, gradient) VALUES
+('11111111-1111-1111-1111-111111111111', 'Artificial Intelligence', 'Master AI concepts, neural networks, and build intelligent systems', 0, 'Intermediate', '12 weeks', 'from-purple-600 to-blue-600'),
+('22222222-2222-2222-2222-222222222222', 'Machine Learning', 'Learn ML algorithms, data preprocessing, and model training', 0, 'Intermediate', '10 weeks', 'from-green-500 to-teal-600'),
+('33333333-3333-3333-3333-333333333333', 'Data Analytics', 'Analyze data, create visualizations, and derive insights', 0, 'Beginner', '8 weeks', 'from-orange-500 to-red-600'),
+('44444444-4444-4444-4444-444444444444', 'Web Development & Hosting', 'Build modern web apps and deploy to production', 0, 'Beginner', '10 weeks', 'from-pink-500 to-purple-600'),
+('55555555-5555-5555-5555-555555555555', 'Cybersecurity', 'Learn ethical hacking, security fundamentals, and protection', 0, 'Intermediate', '10 weeks', 'from-cyan-500 to-blue-600')
+ON CONFLICT (id) DO NOTHING;

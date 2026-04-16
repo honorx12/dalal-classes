@@ -1,4 +1,3 @@
-// src/store/useAuthStore.js
 import { create } from 'zustand';
 import { supabase } from '../lib/supabaseClient';
 
@@ -109,6 +108,11 @@ export const useAuthStore = create((set, get) => ({
   },
 
   isAuthenticated: () => !!get().user,
+
+  isAdmin: () => {
+    const profile = get().profile;
+    return profile?.is_admin === true;
+  },
 }));
 
 export default useAuthStore;

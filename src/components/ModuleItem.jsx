@@ -1,34 +1,24 @@
-// src/components/ModuleItem.jsx
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { Lock, Play, CheckCircle } from 'lucide-react';
 
-const ModuleItem = ({ module, isLocked, isCompleted, onLockedClick, courseId }) => {
-  const [shake, setShake] = useState(false);
-
-  const handleClick = () => {
-    if (isLocked) {
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-      onLockedClick?.();
-    }
-  };
+const ModuleItem = ({ module, isEnrolled, courseId }) => {
+  const isCompleted = module.is_completed;
+  const isLocked = !isEnrolled && !module.is_free;
 
   const content = (
-    <div
-      onClick={handleClick}
-      className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
-        isLocked
-          ? 'bg-slate-100 cursor-pointer hover:bg-slate-200'
-          : 'bg-white cursor-pointer hover:bg-slate-50'
-      } ${shake ? 'animate-shake' : ''}`}
-    >
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+    <div className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+      isLocked
+        ? 'bg-dark-bg/50 cursor-not-allowed opacity-60'
+        : isCompleted
+        ? 'bg-emerald-500/10 cursor-pointer hover:bg-emerald-500/20'
+        : 'bg-dark-card/50 cursor-pointer hover:bg-dark-card border border-dark-border hover:border-accent-violet/50'
+    }`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
         isCompleted
-          ? 'bg-green-500 text-white'
+          ? 'bg-emerald-500 text-white'
           : isLocked
-          ? 'bg-slate-200 text-slate-400'
-          : 'bg-amber-500 text-white'
+          ? 'bg-dark-bg text-slate-500'
+          : 'bg-accent-violet text-white'
       }`}>
         {isCompleted ? (
           <CheckCircle className="w-4 h-4" />
@@ -40,19 +30,19 @@ const ModuleItem = ({ module, isLocked, isCompleted, onLockedClick, courseId }) 
       </div>
       <div className="flex-grow min-w-0">
         <p className={`text-sm font-medium truncate ${
-          isLocked ? 'text-slate-500' : 'text-slate-900'
+          isLocked ? 'text-slate-500' : 'text-white'
         }`}>
           {module.title}
         </p>
         <p className={`text-xs ${
-          isLocked ? 'text-slate-400' : 'text-slate-500'
+          isLocked ? 'text-slate-600' : 'text-slate-400'
         }`}>
-          {module.duration}
+          {module.duration || '10 min'}
         </p>
       </div>
-      {isLocked && (
-        <span className="text-xs text-slate-400 font-medium">
-          Locked
+      {isCompleted && (
+        <span className="text-xs text-emerald-400 font-medium">
+          Done
         </span>
       )}
     </div>
