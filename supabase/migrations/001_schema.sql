@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS modules (
   title TEXT NOT NULL,
   description TEXT,
   video_url TEXT,
+  pdf_url TEXT,
   duration TEXT,
   order_index INTEGER NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

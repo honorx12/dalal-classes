@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
-import { ArrowLeft, CheckCircle, Play, Lock, ChevronLeft, ChevronRight, FileQuestion } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Play, Lock, ChevronLeft, ChevronRight, FileQuestion, FileText, Download } from 'lucide-react';
 
 const LessonPage = () => {
   const { courseId, moduleId } = useParams();
@@ -254,6 +254,17 @@ const LessonPage = () => {
                 </p>
               </div>
               <div className="flex items-center gap-3">
+                {currentModule.pdf_url && (
+                  <a
+                    href={currentModule.pdf_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 bg-accent-violet/20 text-accent-violet border border-accent-violet/30 hover:bg-accent-violet/30 font-medium rounded-lg transition-colors"
+                  >
+                    <FileText className="w-5 h-5" />
+                    Download Notes
+                  </a>
+                )}
                 {!isCompleted ? (
                   <button
                     onClick={handleMarkComplete}

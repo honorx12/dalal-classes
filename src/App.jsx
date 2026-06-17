@@ -12,6 +12,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminPage from './pages/AdminPage';
+import CourseEditorPage from './pages/CourseEditorPage';
 import { useAuthStore } from './store/useAuthStore';
 import { useThemeStore } from './store/useThemeStore';
 
@@ -63,6 +64,16 @@ function App() {
             <Route path="/admin" element={
               <AdminRoute>
                 <AdminPage />
+              </AdminRoute>
+            } />
+            <Route path="/admin/courses/new" element={
+              <AdminRoute>
+                <CourseEditorPage />
+              </AdminRoute>
+            } />
+            <Route path="/admin/courses/:courseId" element={
+              <AdminRoute>
+                <CourseEditorPage />
               </AdminRoute>
             } />
             <Route path="*" element={<Navigate to="/" replace />} />

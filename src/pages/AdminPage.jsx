@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
-import { Users, BookOpen, Award, DollarSign, Shield, RefreshCw } from 'lucide-react';
+import { Users, BookOpen, Award, DollarSign, Shield, RefreshCw, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminPage = () => {
   const { user, profile } = useAuthStore();
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalEnrollments: 0,
@@ -292,39 +294,57 @@ const AdminPage = () => {
                 )}
 
                 {activeTab === 'courses' && (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="text-left text-slate-400 text-sm border-b border-dark-border">
-                          <th className="pb-3 pr-4">Course</th>
-                          <th className="pb-3 pr-4">Level</th>
-                          <th className="pb-3 pr-4">Chapters</th>
-                          <th className="pb-3">Enrollments</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {courses.map((course) => (
-                          <tr key={course.id} className="border-b border-dark-border/50">
-                            <td className="py-3 pr-4">
-                              <p className="text-white font-medium">{course.title}</p>
-                            </td>
-                            <td className="py-3 pr-4">
-                              <span className="px-2 py-1 bg-dark-bg text-slate-400 rounded text-sm">
-                                {course.level || 'Beginner'}
-                              </span>
-                            </td>
-                            <td className="py-3 pr-4 text-slate-300">
-                              {course.chapters?.count || 0}
-                            </td>
-                            <td className="py-3">
-                              <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-sm">
-                                {course.enrollment_count || 0}
-                              </span>
-                            </td>
+                  <div className="space-y-4">
+                    <button
+                      onClick={() => navigate('/admin/courses/new')}
+                      className="flex items-center gap-2 px-4 py-2 bg-accent-violet text-white rounded-lg hover:bg-accent-violet/80"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Create Course
+                    </button>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="text-left text-slate-400 text-sm border-b border-dark-border">
+                            <th className="pb-3 pr-4">Course</th>
+                            <th className="pb-3 pr-4">Level</th>
+                            <th className="pb-3 pr-4">Chapters</th>
+                            <th className="pb-3">Enrollments</th>
+                            <th className="pb-3">Actions</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {courses.map((course) => (
+                            <tr key={course.id} className="border-b border-dark-border/50">
+                              <td className="py-3 pr-4">
+                                <p className="text-white font-medium">{course.title}</p>
+                              </td>
+                              <td className="py-3 pr-4">
+                                <span className="px-2 py-1 bg-dark-bg text-slate-400 rounded text-sm">
+                                  {course.level || 'Beginner'}
+                                </span>
+                              </td>
+                              <td className="py-3 pr-4 text-slate-300">
+                                {course.chapters?.count || 0}
+                              </td>
+                              <td className="py-3">
+                                <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-sm">
+                                  {course.enrollment_count || 0}
+                                </span>
+                              </td>
+                              <td className="py-3">
+                                <button
+                                  onClick={() => navigate(`/admin/courses/${course.id}`)}
+                                  className="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded text-sm hover:bg-accent-cyan/30"
+                                >
+                                  Edit
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 )}
               </>
