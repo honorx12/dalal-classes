@@ -4,6 +4,17 @@ import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
 import { ArrowLeft, Plus, Trash2, Upload, FileText, Save, X, ChevronDown, ChevronRight } from 'lucide-react';
 
+const GRADIENT_PRESETS = [
+  { label: 'Violet Cyan', value: 'bg-gradient-to-r from-accent-violet to-accent-cyan' },
+  { label: 'Blue Indigo', value: 'bg-gradient-to-r from-blue-600 to-indigo-700' },
+  { label: 'Emerald Teal', value: 'bg-gradient-to-r from-emerald-500 to-teal-700' },
+  { label: 'Purple Pink', value: 'bg-gradient-to-r from-purple-600 to-pink-600' },
+  { label: 'Orange Red', value: 'bg-gradient-to-r from-orange-500 to-red-600' },
+  { label: 'Sky Blue', value: 'bg-gradient-to-r from-sky-400 to-blue-600' },
+  { label: 'Rose Pink', value: 'bg-gradient-to-r from-rose-500 to-pink-600' },
+  { label: 'Lime Green', value: 'bg-gradient-to-r from-lime-400 to-emerald-600' },
+];
+
 const CourseEditorPage = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -66,6 +77,7 @@ const CourseEditorPage = () => {
           instructor: course.instructor,
           thumbnail: course.thumbnail,
           gradient: course.gradient,
+          gradient_style: course.gradient_style,
         }).eq('id', courseId).select().single()
       : await supabase.from('courses').insert({
           title: course.title,
@@ -75,6 +87,7 @@ const CourseEditorPage = () => {
           instructor: course.instructor,
           thumbnail: course.thumbnail,
           gradient: course.gradient,
+          gradient_style: course.gradient_style,
         }).select().single();
     
     if (error) {
@@ -309,6 +322,40 @@ const CourseEditorPage = () => {
                     className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white"
                     placeholder="https://..."
                   />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-slate-400 text-sm mb-3">Course Card Background Theme</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {GRADIENT_PRESETS.map((preset) => {
+                      const isSelected = course.gradient_style === preset.value;
+                      return (
+                        <button
+                          key={preset.value}
+                          type="button"
+                          onClick={() => setCourse({ ...course, gradient_style: preset.value })}
+                          className={`relative h-16 rounded-xl border-2 transition-all ${
+                            isSelected
+                              ? 'border-white shadow-lg scale-[1.02]'
+                              : 'border-transparent hover:border-white/30'
+                          }`}
+                        >
+                          <div className={`absolute inset-0 rounded-xl ${preset.value}`} />
+                          {isSelected && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
+                                <svg className="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                              </div>
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-2 text-xs text-slate-500">
+                    Selected: {GRADIENT_PRESETS.find(g => g.value === course.gradient_style)?.label || 'Default'}
+                  </p>
                 </div>
               </div>
               <button

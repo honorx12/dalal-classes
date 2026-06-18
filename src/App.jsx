@@ -10,6 +10,7 @@ import CourseDetailPage from './pages/CourseDetailPage';
 import LessonPage from './pages/LessonPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import ForgotPassword from './components/auth/ForgotPassword';
 import ProfilePage from './pages/ProfilePage';
 import AdminPage from './pages/AdminPage';
 import CourseEditorPage from './pages/CourseEditorPage';
@@ -56,6 +57,7 @@ function App() {
             <Route path="/courses/:courseId/module/:moduleId" element={<LessonPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/profile" element={
               <ProtectedRoute>
                 <ProfilePage />
