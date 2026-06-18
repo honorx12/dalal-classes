@@ -3,6 +3,7 @@ import { X, Download, Award } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useAuthStore } from '../store/useAuthStore';
+import { supabase } from '../lib/supabaseClient';
 
 const CertificateModal = ({ course, onClose }) => {
   const { user, profile } = useAuthStore();
@@ -39,6 +40,22 @@ const CertificateModal = ({ course, onClose }) => {
 
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`Dalal-Classes-Certificate-${course.title.replace(/\s+/g, '-')}.pdf`);
+
+      if (user) {
+        try {
+          await supabase.from('certificates').insert({
+            user_id: user.id,
+            course_id: course.id,
+            certificate_id: certificateId,
+            student_name: studentName,
+            course_title: course.title,
+            completion_date: completionDate,
+            created_at: new Date().toISOString(),
+          });
+        } catch (dbErr) {
+          console.error('Failed to save certificate record:', dbErr);
+        }
+      }
     } catch (err) {
       console.error('Failed to generate certificate:', err);
     }

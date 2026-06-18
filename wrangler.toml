@@ -1,6 +1,14 @@
 name = "dalal-classes-worker"
-main = "workers/src/index.js"
+main = "src/index.js"
 compatibility_date = "2026-06-18"
 
 [vars]
-ENVIRONMENT = "development"
+# Add any environment variables here if required by your script
+# Example: SUPABASE_URL = "your-supabase-url"
+
+# If your app handles assets/build files directly through a Worker:
+[site]
+bucket = "./dist"
+
+[compatibility_flags]
+# Optional flags for standard routing stability

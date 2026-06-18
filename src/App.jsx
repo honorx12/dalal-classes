@@ -14,6 +14,7 @@ import ForgotPassword from './components/auth/ForgotPassword';
 import ProfilePage from './pages/ProfilePage';
 import AdminPage from './pages/AdminPage';
 import CourseEditorPage from './pages/CourseEditorPage';
+import NotFound from './pages/NotFound';
 import { useAuthStore } from './store/useAuthStore';
 import { useThemeStore } from './store/useThemeStore';
 
@@ -78,7 +79,7 @@ function App() {
                 <CourseEditorPage />
               </AdminRoute>
             } />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />
