@@ -26,16 +26,8 @@ const AdminPage = () => {
     setLoading(true);
 
     const [usersRes, enrollmentsRes, coursesRes] = await Promise.all([
-      supabase.from('profiles').select('*').order('created_at', { ascending: false }),
-      supabase
-        .from('enrollments')
-        .select(`
-          *,
-          user:profiles(full_name, email),
-          course:courses(title)
-        `)
-        .order('enrolled_at', { ascending: false })
-        .limit(50),
+      supabase.rpc('get_users_with_emails'),
+      supabase.rpc('get_enrollments_with_user_emails', { limit_count: 50 }),
       supabase
         .from('courses')
         .select(`
@@ -174,15 +166,15 @@ const AdminPage = () => {
                               <td className="py-3 pr-4">
                                 <div>
                                   <p className="text-white font-medium">
-                                    {enrollment.user?.full_name || 'Unknown'}
+                                    {enrollment.user_full_name || 'Unknown'}
                                   </p>
                                   <p className="text-slate-500 text-sm">
-                                    {enrollment.user?.email}
+                                    {enrollment.user_email}
                                   </p>
                                 </div>
                               </td>
                               <td className="py-3 pr-4 text-slate-300">
-                                {enrollment.course?.title || 'Unknown'}
+                                {enrollment.course_title || 'Unknown'}
                               </td>
                               <td className="py-3 pr-4">
                                 <span className={`px-2 py-1 rounded text-sm ${
@@ -251,6 +243,7 @@ const AdminPage = () => {
                       <thead>
                         <tr className="text-left text-slate-400 text-sm border-b border-dark-border">
                           <th className="pb-3 pr-4">User</th>
+                          <th className="pb-3 pr-4">Email</th>
                           <th className="pb-3 pr-4">Course</th>
                           <th className="pb-3 pr-4">Progress</th>
                           <th className="pb-3">Date</th>
@@ -259,16 +252,14 @@ const AdminPage = () => {
                       <tbody>
                         {enrollments.map((enrollment) => (
                           <tr key={enrollment.id} className="border-b border-dark-border/50">
-                            <td className="py-3 pr-4">
-                              <p className="text-white">
-                                {enrollment.user?.full_name || 'Unknown'}
-                              </p>
-                              <p className="text-slate-500 text-sm">
-                                {enrollment.user?.email}
-                              </p>
+                            <td className="py-3 pr-4 text-white font-medium">
+                              {enrollment.user_full_name || 'Unknown'}
+                            </td>
+                            <td className="py-3 pr-4 text-slate-400">
+                              {enrollment.user_email || 'N/A'}
                             </td>
                             <td className="py-3 pr-4 text-slate-300">
-                              {enrollment.course?.title || 'Unknown'}
+                              {enrollment.course_title || 'Unknown'}
                             </td>
                             <td className="py-3 pr-4">
                               <div className="flex items-center gap-2">
