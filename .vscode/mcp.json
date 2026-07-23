@@ -1,13 +1,18 @@
 {
-  "servers": {
-    "code-review-graph": {
-      "command": "uvx",
-      "args": [
-        "code-review-graph",
-        "serve"
-      ],
-      "cwd": "C:\\Users\\medev\\DALAL CLASSES",
-      "type": "stdio"
-    }
-  }
+	"servers": {
+		"code-review-graph": {
+			"command": "uvx",
+			"args": [
+				"code-review-graph",
+				"serve"
+			],
+			"cwd": "C:\\Users\\medev\\DALAL CLASSES",
+			"type": "stdio"
+		},
+		"my-mcp-server-9b6df620": {
+			"url": "http://localhost:3000",
+			"type": "http"
+		}
+	},
+	"inputs": []
 }

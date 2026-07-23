@@ -1,100 +1,139 @@
 import { Link } from 'react-router-dom';
-import { GraduationCap, Github, Twitter, Linkedin, Mail, Heart } from 'lucide-react';
+import { GraduationCap, Github, Twitter, Linkedin, Mail, Heart, ArrowUpRight, Sparkles } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     courses: [
-      { label: 'Artificial Intelligence', href: '/courses/11111111-1111-1111-1111-111111111111' },
-      { label: 'Machine Learning', href: '/courses/22222222-2222-2222-2222-222222222222' },
-      { label: 'Data Analytics', href: '/courses/33333333-3333-3333-3333-333333333333' },
-      { label: 'Web Development', href: '/courses/44444444-4444-4444-4444-444444444444' },
-      { label: 'Cybersecurity', href: '/courses/55555555-5555-5555-5555-555555555555' },
+      { label: 'Artificial Intelligence', href: '/courses' },
+      { label: 'Machine Learning', href: '/courses' },
+      { label: 'Data Analytics', href: '/courses' },
+      { label: 'Web Development', href: '/courses' },
+      { label: 'Cybersecurity', href: '/courses' },
     ],
-    company: [
-      { label: 'About Us', href: '#' },
-      { label: 'Contact', href: '#' },
-      { label: 'Careers', href: '#' },
+    resources: [
+      { label: 'How It Works', href: '/' },
+      { label: 'FAQ', href: '/' },
+      { label: 'Support', href: 'mailto:support@dalalclasses.com' },
+      { label: 'Blog', href: '/' },
     ],
     legal: [
       { label: 'Privacy Policy', href: '#' },
       { label: 'Terms of Service', href: '#' },
+      { label: 'Cookie Policy', href: '#' },
     ],
   };
 
+  const socialLinks = [
+    { icon: Twitter, href: '#', label: 'Twitter' },
+    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+    { icon: Github, href: '#', label: 'GitHub' },
+    { icon: Mail, href: 'mailto:contact@dalalclasses.com', label: 'Email' },
+  ];
+
   return (
-    <footer className="bg-dark-card/50 backdrop-blur-xl border-t border-dark-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-violet to-accent-cyan flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
+    <footer className="relative bg-base border-t border-line/[0.06]">
+      {/* Top Gradient Line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Footer Content */}
+        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+          {/* Brand Column */}
+          <div className="lg:col-span-2 space-y-6">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="w-12 h-12 rounded-xl bg-gradient-brand flex items-center justify-center shadow-glow-brand group-hover:shadow-glow-lg transition-all duration-300">
+                <GraduationCap className="w-7 h-7 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">Dalal Classes</span>
+              <div className="flex flex-col">
+                <span className="font-display text-xl font-bold text-content">Dalal Classes</span>
+                <span className="text-xs text-content-muted flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-accent-amber" />
+                  Free Education for All
+                </span>
+              </div>
             </Link>
-            <p className="text-slate-400 text-sm mb-6">
-              Master future skills with expert guidance. All courses are completely FREE.
+
+            <p className="text-content-muted text-sm leading-relaxed max-w-sm">
+              Master future skills with expert guidance. Join thousands of students learning AI,
+              Machine Learning, Data Analytics, and more. All courses are completely FREE.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-lg bg-dark-bg flex items-center justify-center text-slate-400 hover:text-white hover:bg-accent-violet/20 transition-all">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-dark-bg flex items-center justify-center text-slate-400 hover:text-white hover:bg-accent-violet/20 transition-all">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-dark-bg flex items-center justify-center text-slate-400 hover:text-white hover:bg-accent-violet/20 transition-all">
-                <Github className="w-5 h-5" />
-              </a>
-              <a href="mailto:contact@dalalclasses.com" className="w-10 h-10 rounded-lg bg-dark-bg flex items-center justify-center text-slate-400 hover:text-white hover:bg-accent-violet/20 transition-all">
-                <Mail className="w-5 h-5" />
-              </a>
+
+            {/* Social Links */}
+            <div className="flex gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  className="w-10 h-10 rounded-xl bg-surface/5 border border-line/10 flex items-center justify-center text-content-muted hover:text-content hover:bg-brand/20 hover:border-brand/30 hover:shadow-glow-brand transition-all duration-300"
+                  aria-label={social.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
             </div>
           </div>
 
+          {/* Courses Column */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Free Courses</h3>
-            <ul className="space-y-2">
+            <h3 className="font-display font-bold text-content mb-5 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-accent-cyan" />
+              Free Courses
+            </h3>
+            <ul className="space-y-3">
               {footerLinks.courses.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-slate-400 hover:text-accent-cyan text-sm transition-colors"
+                    className="group flex items-center gap-1 text-content-muted hover:text-accent-cyan text-sm transition-colors duration-200"
                   >
                     {link.label}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
+          {/* Resources Column */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Company</h3>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
+            <h3 className="font-display font-bold text-content mb-5 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-accent-emerald" />
+              Resources
+            </h3>
+            <ul className="space-y-3">
+              {footerLinks.resources.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-slate-400 hover:text-white text-sm transition-colors"
+                    className="group flex items-center gap-1 text-content-muted hover:text-accent-emerald text-sm transition-colors duration-200"
                   >
                     {link.label}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
+          {/* Legal Column */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Legal</h3>
-            <ul className="space-y-2">
+            <h3 className="font-display font-bold text-content mb-5 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-accent-amber" />
+              Legal
+            </h3>
+            <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-slate-400 hover:text-white text-sm transition-colors"
+                    className="group flex items-center gap-1 text-content-muted hover:text-accent-amber text-sm transition-colors duration-200"
                   >
                     {link.label}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
                   </a>
                 </li>
               ))}
@@ -102,10 +141,41 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-dark-border text-center">
-          <p className="text-slate-500 text-sm flex items-center justify-center gap-1">
-            © {currentYear} Dalal Classes. Made with <Heart className="w-4 h-4 text-red-500" />. All rights reserved.
-          </p>
+        {/* Newsletter Section */}
+        <div className="py-8 border-t border-line/[0.06]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <h4 className="font-display font-semibold text-content mb-1">Stay Updated</h4>
+              <p className="text-content-muted text-sm">Get notified about new courses and updates</p>
+            </div>
+            <div className="flex gap-3 w-full md:w-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="input-field flex-1 md:w-64"
+              />
+              <button className="btn-glow px-6 py-3 whitespace-nowrap">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="py-6 border-t border-line/[0.06]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-content-muted text-sm flex items-center gap-1">
+              © {currentYear} Dalal Classes. Made with
+              <Heart className="w-4 h-4 text-accent-rose fill-accent-rose animate-pulse" />
+              for learners worldwide.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-content-muted">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
+                All systems operational
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

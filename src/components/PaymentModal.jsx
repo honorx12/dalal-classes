@@ -1,21 +1,29 @@
 // src/components/PaymentModal.jsx
 import { useState, useEffect } from 'react';
-import { X, CreditCard, Lock, CheckCircle, Loader2, Shield } from 'lucide-react';
+import { X, CreditCard, Loader2, Shield } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
+import { getWorkerUrl, isWorkerConfigured, isRazorpayConfigured } from '../lib/env';
 
 const PaymentModal = ({ course, onClose, onSuccess }) => {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
   useEffect(() => {
+    const existingScript = document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
+    if (existingScript) {
+      return;
+    }
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
-    script.onload = () => setRazorpayLoaded(true);
     document.head.appendChild(script);
+    return () => {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
   }, []);
 
   const handlePayment = async () => {
@@ -24,13 +32,16 @@ const PaymentModal = ({ course, onClose, onSuccess }) => {
       return;
     }
 
+    if (!isRazorpayConfigured()) {
+      setError('Payment system is not configured. Please contact support.');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      const workerUrl = import.meta.env.VITE_WORKER_URL;
-      
-      if (!workerUrl || workerUrl === 'TO_BE_ADDED_LATER') {
+      if (!isWorkerConfigured()) {
         const { error: enrollError } = await supabase
           .from('enrollments')
           .upsert({
@@ -47,6 +58,7 @@ const PaymentModal = ({ course, onClose, onSuccess }) => {
         return;
       }
 
+      const workerUrl = getWorkerUrl();
       const response = await fetch(`${workerUrl}/api/create-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -161,7 +173,7 @@ const PaymentModal = ({ course, onClose, onSuccess }) => {
           <hr className="my-3 border-slate-200" />
           <div className="flex justify-between items-center">
             <span className="text-lg font-semibold text-slate-900">Total</span>
-            <span className="text-2xl font-bold text-navy">₹{course.price}</span>
+            <span className="text-2xl font-bold text-slate-900">₹{course.price}</span>
           </div>
         </div>
 

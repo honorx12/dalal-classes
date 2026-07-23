@@ -1,10 +1,22 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { X, CheckCircle, XCircle, Clock, RotateCcw, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
 import { CONFIG } from '../config';
 
-const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
+const backdropMotion = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+};
+
+const panelMotion = {
+  initial: { opacity: 0, scale: 0.94, y: 12 },
+  animate: { opacity: 1, scale: 1, y: 0 },
+  transition: { type: 'spring', stiffness: 260, damping: 22 },
+};
+
+const QuizModal = ({ chapter, onClose, onComplete }) => {
   const { user } = useAuthStore();
   const [quiz, setQuiz] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -20,6 +32,7 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
 
   useEffect(() => {
     fetchQuiz();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter.id]);
 
   const fetchQuiz = async () => {
@@ -54,7 +67,7 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
         if (attempts && attempts.length > 0) {
           const last = attempts[0];
           setLastAttempt(last);
-          
+
           const cooldownMs = CONFIG.quiz.retryCooldownHours * 60 * 60 * 1000;
           const timeSince = Date.now() - new Date(last.created_at).getTime();
           setCanRetry(timeSince >= cooldownMs);
@@ -73,7 +86,7 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
 
   const handleSubmitAnswer = () => {
     if (selectedAnswer === null) return;
-    
+
     const newQuestions = [...questions];
     newQuestions[currentQuestion].userAnswer = selectedAnswer;
     newQuestions[currentQuestion].isCorrect = selectedAnswer === questions[currentQuestion].correct_answer;
@@ -93,7 +106,7 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
 
   const finishQuiz = async () => {
     setSubmitting(true);
-    
+
     const correctCount = questions.filter(q => q.isCorrect).length;
     const finalScore = Math.round((correctCount / questions.length) * 100);
     setScore(finalScore);
@@ -120,12 +133,12 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
   if (loading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-        <div className="relative bg-dark-card border border-dark-border rounded-2xl p-8 max-w-lg w-full">
+        <motion.div {...backdropMotion} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+        <motion.div {...panelMotion} className="relative bg-elevated border border-line/10 rounded-2xl p-8 max-w-lg w-full">
           <div className="flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-accent-violet/30 border-t-accent-violet rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-brand/30 border-t-brand rounded-full animate-spin"></div>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -133,83 +146,85 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
   if (error) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-        <div className="relative bg-dark-card border border-dark-border rounded-2xl p-8 max-w-lg w-full text-center">
-          <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-white mb-2">Quiz Unavailable</h2>
-          <p className="text-slate-400 mb-6">{error}</p>
+        <motion.div {...backdropMotion} className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+        <motion.div {...panelMotion} className="relative bg-elevated border border-line/10 rounded-2xl p-8 max-w-lg w-full text-center">
+          <AlertCircle className="w-16 h-16 text-accent-rose mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-content mb-2">Quiz Unavailable</h2>
+          <p className="text-content-muted mb-6">{error}</p>
           <button
             onClick={onClose}
-            className="px-6 py-3 bg-accent-violet text-white font-semibold rounded-xl"
+            className="px-6 py-3 bg-brand text-white font-semibold rounded-xl"
           >
             Close
           </button>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   if (lastAttempt && !canRetry && !showResult && score === 0) {
     const hoursLeft = Math.ceil((CONFIG.quiz.retryCooldownHours * 60 * 60 * 1000 - (Date.now() - new Date(lastAttempt.created_at).getTime())) / (60 * 60 * 1000));
-    
+
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-        <div className="relative bg-dark-card border border-dark-border rounded-2xl p-8 max-w-lg w-full text-center">
+        <motion.div {...backdropMotion} className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+        <motion.div {...panelMotion} className="relative bg-elevated border border-line/10 rounded-2xl p-8 max-w-lg w-full text-center">
           <Clock className="w-16 h-16 text-accent-cyan mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-white mb-2">Please Wait</h2>
-          <p className="text-slate-400 mb-4">
+          <h2 className="text-xl font-bold text-content mb-2">Please Wait</h2>
+          <p className="text-content-muted mb-4">
             You can retry this quiz after {hoursLeft} hours
           </p>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-content-muted mb-6">
             Your last score: {lastAttempt.score}%
           </p>
           <button
             onClick={onClose}
-            className="px-6 py-3 bg-accent-violet text-white font-semibold rounded-xl"
+            className="px-6 py-3 bg-brand text-white font-semibold rounded-xl"
           >
             Close
           </button>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   if (score > 0) {
     const passed = score >= CONFIG.quiz.passMark;
-    
+
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-        <div className="relative bg-dark-card border border-dark-border rounded-2xl p-8 max-w-lg w-full text-center animate-slide-up">
+        <motion.div {...backdropMotion} className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+        <motion.div {...panelMotion} className="relative bg-elevated border border-line/10 rounded-2xl p-8 max-w-lg w-full text-center">
           <div className={`w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center ${
-            passed ? 'bg-emerald-500/20' : 'bg-red-500/20'
+            passed ? 'bg-accent-emerald/20' : 'bg-accent-rose/20'
           }`}>
             {passed ? (
-              <CheckCircle className="w-10 h-10 text-emerald-400" />
+              <CheckCircle className="w-10 h-10 text-accent-emerald" />
             ) : (
-              <XCircle className="w-10 h-10 text-red-400" />
+              <XCircle className="w-10 h-10 text-accent-rose" />
             )}
           </div>
-          
-          <h2 className="text-2xl font-bold text-white mb-2">
+
+          <h2 className={`text-2xl font-bold mb-2 ${
+            passed ? 'bg-gradient-vivid bg-clip-text text-transparent' : 'text-content'
+          }`}>
             {passed ? 'Congratulations!' : 'Keep Trying!'}
           </h2>
-          
-          <p className="text-slate-400 mb-6">
-            {passed 
-              ? 'You passed the quiz and completed this chapter!' 
+
+          <p className="text-content-muted mb-6">
+            {passed
+              ? 'You passed the quiz and completed this chapter!'
               : `You need ${CONFIG.quiz.passMark}% to pass. Try again in ${CONFIG.quiz.retryCooldownHours} hours.`}
           </p>
-          
-          <div className={`text-5xl font-bold mb-6 ${passed ? 'text-emerald-400' : 'text-red-400'}`}>
+
+          <div className={`text-5xl font-bold mb-6 ${passed ? 'text-accent-emerald' : 'text-accent-rose'}`}>
             {score}%
           </div>
 
-          <div className="text-sm text-slate-400 mb-6">
+          <div className="text-sm text-content-muted mb-6">
             {questions.filter(q => q.isCorrect).length} of {questions.length} correct
           </div>
-          
+
           <div className="flex gap-4">
             {!passed && (
               <button
@@ -221,7 +236,7 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
                   setSelectedAnswer(null);
                   setLastAttempt({ ...lastAttempt, created_at: new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString() });
                 }}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-accent-violet/20 border border-accent-violet/50 text-accent-violet font-semibold rounded-xl"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-brand/20 border border-brand/50 text-brand font-semibold rounded-xl"
               >
                 <RotateCcw className="w-5 h-5" />
                 Retry Quiz
@@ -233,15 +248,15 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
                 onClose();
               }}
               className={`flex-1 px-6 py-3 font-semibold rounded-xl ${
-                passed 
-                  ? 'bg-gradient-to-r from-accent-violet to-accent-cyan text-white' 
-                  : 'bg-dark-border text-white'
+                passed
+                  ? 'bg-gradient-vivid text-white shadow-glow-brand'
+                  : 'bg-surface/10 text-content'
               }`}
             >
               {passed ? 'Continue' : 'Close'}
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -251,31 +266,31 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      
-      <div className="relative bg-dark-card border border-dark-border rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-slide-up">
-        <div className="p-6 border-b border-dark-border flex items-center justify-between">
+      <motion.div {...backdropMotion} className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+
+      <motion.div {...panelMotion} className="relative bg-elevated border border-line/10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div className="p-6 border-b border-line/10 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-white">{chapter.title} Quiz</h2>
-            <p className="text-sm text-slate-400">Question {currentQuestion + 1} of {questions.length}</p>
+            <h2 className="text-xl font-bold text-content">{chapter.title} Quiz</h2>
+            <p className="text-sm text-content-muted">Question {currentQuestion + 1} of {questions.length}</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-dark-border text-slate-400 hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-surface/10 text-content-muted hover:text-content transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="h-1 bg-dark-bg">
-          <div 
-            className="h-full bg-gradient-to-r from-accent-violet to-accent-cyan transition-all duration-300"
+        <div className="h-1 bg-surface/10">
+          <div
+            className="h-full bg-gradient-vivid transition-all duration-300"
             style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
           />
         </div>
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
-          <p className="text-lg text-white mb-6">{q?.question}</p>
+          <p className="text-lg text-content mb-6">{q?.question}</p>
 
           <div className="space-y-3">
             {options.map((option, index) => {
@@ -290,12 +305,12 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
                   disabled={showResult}
                   className={`w-full p-4 rounded-xl text-left transition-all ${
                     isCorrect
-                      ? 'bg-emerald-500/20 border-2 border-emerald-500 text-emerald-400'
+                      ? 'bg-accent-emerald/20 border-2 border-accent-emerald text-accent-emerald'
                       : isWrong
-                      ? 'bg-red-500/20 border-2 border-red-500 text-red-400'
+                      ? 'bg-accent-rose/20 border-2 border-accent-rose text-accent-rose'
                       : isSelected
-                      ? 'bg-accent-violet/20 border-2 border-accent-violet text-white'
-                      : 'bg-dark-bg/50 border-2 border-dark-border text-slate-300 hover:border-accent-violet/50'
+                      ? 'bg-brand/20 border-2 border-brand text-content'
+                      : 'bg-surface/5 border-2 border-line/10 text-content-secondary hover:border-brand/50'
                   }`}
                 >
                   <span className="font-medium">{option}</span>
@@ -307,12 +322,12 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
           </div>
         </div>
 
-        <div className="p-6 border-t border-dark-border">
+        <div className="p-6 border-t border-line/10">
           {!showResult ? (
             <button
               onClick={handleSubmitAnswer}
               disabled={selectedAnswer === null}
-              className="w-full py-3 bg-gradient-to-r from-accent-violet to-accent-cyan text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-glow transition-all"
+              className="w-full py-3 bg-gradient-vivid text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-glow-brand transition-all"
             >
               Submit Answer
             </button>
@@ -320,13 +335,13 @@ const QuizModal = ({ chapter, courseId, onClose, onComplete }) => {
             <button
               onClick={handleNextQuestion}
               disabled={submitting}
-              className="w-full py-3 bg-gradient-to-r from-accent-violet to-accent-cyan text-white font-semibold rounded-xl hover:shadow-glow transition-all"
+              className="w-full py-3 bg-gradient-vivid text-white font-semibold rounded-xl hover:shadow-glow-brand transition-all"
             >
               {currentQuestion < questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import { ArrowLeft, Plus, Trash2, Upload, FileText, Save, X, ChevronDown, ChevronRight } from 'lucide-react';
 
 const GRADIENT_PRESETS = [
-  { label: 'Violet Cyan', value: 'bg-gradient-to-r from-accent-violet to-accent-cyan' },
+  { label: 'Violet Cyan', value: 'bg-gradient-to-r from-brand to-accent-cyan' },
   { label: 'Blue Indigo', value: 'bg-gradient-to-r from-blue-600 to-indigo-700' },
   { label: 'Emerald Teal', value: 'bg-gradient-to-r from-emerald-500 to-teal-700' },
   { label: 'Purple Pink', value: 'bg-gradient-to-r from-purple-600 to-pink-600' },
@@ -18,7 +18,7 @@ const GRADIENT_PRESETS = [
 const CourseEditorPage = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const { profile } = useAuthStore();
+  const { profile: _profile } = useAuthStore();
   
   const [course, setCourse] = useState(null);
   const [chapters, setChapters] = useState([]);
@@ -36,6 +36,7 @@ const CourseEditorPage = () => {
     } else {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId]);
 
   const fetchCourse = async () => {
@@ -165,7 +166,7 @@ const CourseEditorPage = () => {
     setUploadingPdf(moduleId);
     
     const fileName = `${moduleId}/${file.name}`;
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('course-materials')
       .upload(fileName, file, { upsert: true });
     
@@ -218,8 +219,8 @@ const CourseEditorPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dark-bg">
-        <div className="w-8 h-8 border-4 border-accent-violet/30 border-t-accent-violet rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-base">
+        <div className="w-8 h-8 border-4 border-brand/30 border-t-brand rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -236,7 +237,7 @@ const CourseEditorPage = () => {
         </button>
 
         {!courseId && !course && (
-          <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-6">
+          <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Create New Course</h2>
             <div className="space-y-4">
               <div>
@@ -245,14 +246,14 @@ const CourseEditorPage = () => {
                   type="text"
                   value={course?.title || ''}
                   onChange={(e) => setCourse({ ...course, title: e.target.value })}
-                  className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white"
+                  className="w-full bg-base border border-line/20 rounded-lg px-4 py-2 text-white"
                   placeholder="Enter course title"
                 />
               </div>
               <button
                 onClick={handleSaveCourse}
                 disabled={saving || !course?.title}
-                className="px-4 py-2 bg-accent-violet text-white rounded-lg hover:bg-accent-violet/80 disabled:opacity-50"
+                className="px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand/80 disabled:opacity-50"
               >
                 {saving ? 'Creating...' : 'Create Course'}
               </button>
@@ -262,7 +263,7 @@ const CourseEditorPage = () => {
 
         {course && courseId && (
           <div className="space-y-6">
-            <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-6">
+            <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-6">
               <h2 className="text-xl font-semibold text-white mb-4">Course Details</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -271,7 +272,7 @@ const CourseEditorPage = () => {
                     type="text"
                     value={course.title || ''}
                     onChange={(e) => setCourse({ ...course, title: e.target.value })}
-                    className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white"
+                    className="w-full bg-base border border-line/20 rounded-lg px-4 py-2 text-white"
                   />
                 </div>
                 <div>
@@ -279,7 +280,7 @@ const CourseEditorPage = () => {
                   <select
                     value={course.level || 'Beginner'}
                     onChange={(e) => setCourse({ ...course, level: e.target.value })}
-                    className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white"
+                    className="w-full bg-base border border-line/20 rounded-lg px-4 py-2 text-white"
                   >
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
@@ -292,7 +293,7 @@ const CourseEditorPage = () => {
                     type="text"
                     value={course.duration || ''}
                     onChange={(e) => setCourse({ ...course, duration: e.target.value })}
-                    className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white"
+                    className="w-full bg-base border border-line/20 rounded-lg px-4 py-2 text-white"
                     placeholder="e.g., 8 weeks"
                   />
                 </div>
@@ -302,7 +303,7 @@ const CourseEditorPage = () => {
                     type="text"
                     value={course.instructor || ''}
                     onChange={(e) => setCourse({ ...course, instructor: e.target.value })}
-                    className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white"
+                    className="w-full bg-base border border-line/20 rounded-lg px-4 py-2 text-white"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -310,7 +311,7 @@ const CourseEditorPage = () => {
                   <textarea
                     value={course.description || ''}
                     onChange={(e) => setCourse({ ...course, description: e.target.value })}
-                    className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white h-24"
+                    className="w-full bg-base border border-line/20 rounded-lg px-4 py-2 text-white h-24"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -319,7 +320,7 @@ const CourseEditorPage = () => {
                     type="text"
                     value={course.thumbnail || ''}
                     onChange={(e) => setCourse({ ...course, thumbnail: e.target.value })}
-                    className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white"
+                    className="w-full bg-base border border-line/20 rounded-lg px-4 py-2 text-white"
                     placeholder="https://..."
                   />
                 </div>
@@ -361,14 +362,14 @@ const CourseEditorPage = () => {
               <button
                 onClick={handleSaveCourse}
                 disabled={saving}
-                className="mt-4 px-4 py-2 bg-accent-violet text-white rounded-lg hover:bg-accent-violet/80 disabled:opacity-50 flex items-center gap-2"
+                className="mt-4 px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand/80 disabled:opacity-50 flex items-center gap-2"
               >
                 <Save className="w-4 h-4" />
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
 
-            <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-6">
+            <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-6">
               <h2 className="text-xl font-semibold text-white mb-4">Chapters & Modules</h2>
               
               <div className="mb-4 flex gap-2">
@@ -377,7 +378,7 @@ const CourseEditorPage = () => {
                   value={newChapterTitle}
                   onChange={(e) => setNewChapterTitle(e.target.value)}
                   placeholder="New chapter title"
-                  className="flex-1 bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-white"
+                  className="flex-1 bg-base border border-line/20 rounded-lg px-4 py-2 text-white"
                 />
                 <button
                   onClick={handleAddChapter}
@@ -391,9 +392,9 @@ const CourseEditorPage = () => {
 
               <div className="space-y-4">
                 {chapters.map((chapter) => (
-                  <div key={chapter.id} className="border border-dark-border rounded-lg overflow-hidden">
+                  <div key={chapter.id} className="border border-line/20 rounded-lg overflow-hidden">
                     <div
-                      className="flex items-center justify-between p-4 bg-dark-bg/50 cursor-pointer"
+                      className="flex items-center justify-between p-4 bg-base/50 cursor-pointer"
                       onClick={() => toggleChapter(chapter.id)}
                     >
                       <div className="flex items-center gap-2">
@@ -419,7 +420,7 @@ const CourseEditorPage = () => {
                     </div>
 
                     {expandedChapters[chapter.id] && (
-                      <div className="p-4 border-t border-dark-border space-y-4">
+                      <div className="p-4 border-t border-line/20 space-y-4">
                         <div className="flex gap-2">
                           <input
                             type="text"
@@ -429,7 +430,7 @@ const CourseEditorPage = () => {
                               [chapter.id]: { ...newModuleData[chapter.id], title: e.target.value }
                             })}
                             placeholder="Module title"
-                            className="flex-1 bg-dark-card border border-dark-border rounded-lg px-4 py-2 text-white"
+                            className="flex-1 bg-elevated border border-line/20 rounded-lg px-4 py-2 text-white"
                           />
                           <input
                             type="text"
@@ -439,12 +440,12 @@ const CourseEditorPage = () => {
                               [chapter.id]: { ...newModuleData[chapter.id], duration: e.target.value }
                             })}
                             placeholder="Duration"
-                            className="w-24 bg-dark-card border border-dark-border rounded-lg px-4 py-2 text-white"
+                            className="w-24 bg-elevated border border-line/20 rounded-lg px-4 py-2 text-white"
                           />
                           <button
                             onClick={() => handleAddModule(chapter.id)}
                             disabled={!newModuleData[chapter.id]?.title}
-                            className="px-4 py-2 bg-accent-violet text-white rounded-lg hover:bg-accent-violet/80 disabled:opacity-50"
+                            className="px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand/80 disabled:opacity-50"
                           >
                             Add
                           </button>
@@ -453,7 +454,7 @@ const CourseEditorPage = () => {
                         {chapter.modules?.map((module) => (
                           <div
                             key={module.id}
-                            className="flex items-center gap-4 p-3 bg-dark-bg/30 rounded-lg"
+                            className="flex items-center gap-4 p-3 bg-base/30 rounded-lg"
                           >
                             <div className="flex-1">
                               <p className="text-white font-medium">{module.title}</p>
@@ -480,7 +481,7 @@ const CourseEditorPage = () => {
                                   </button>
                                 </div>
                               ) : (
-                                <label className="flex items-center gap-2 px-3 py-1 bg-dark-card border border-dark-border rounded-lg cursor-pointer hover:bg-dark-bg text-slate-300 text-sm">
+                                <label className="flex items-center gap-2 px-3 py-1 bg-elevated border border-line/20 rounded-lg cursor-pointer hover:bg-base text-slate-300 text-sm">
                                   <Upload className="w-4 h-4" />
                                   {uploadingPdf === module.id ? 'Uploading...' : 'Upload PDF'}
                                   <input
@@ -498,7 +499,7 @@ const CourseEditorPage = () => {
                                 value={module.video_url || ''}
                                 onChange={(e) => handleUpdateModule(module.id, { video_url: e.target.value })}
                                 placeholder="Video URL"
-                                className="w-48 bg-dark-card border border-dark-border rounded-lg px-3 py-1 text-white text-sm"
+                                className="w-48 bg-elevated border border-line/20 rounded-lg px-3 py-1 text-white text-sm"
                               />
                               
                               <button

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
-import { Users, BookOpen, Award, DollarSign, Shield, RefreshCw, Plus } from 'lucide-react';
+import { Users, BookOpen, Award, Shield, RefreshCw, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const AdminPage = () => {
-  const { user, profile } = useAuthStore();
+  const { profile } = useAuthStore();
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalUsers: 0,
@@ -72,7 +72,7 @@ const AdminPage = () => {
     <div className="py-8 px-4 animate-fade-in">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 bg-gradient-to-br from-accent-violet to-accent-cyan rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-brand to-accent-cyan rounded-xl flex items-center justify-center">
             <Shield className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -81,17 +81,17 @@ const AdminPage = () => {
           </div>
           <button
             onClick={fetchData}
-            className="ml-auto p-2 text-slate-400 hover:text-white hover:bg-dark-card rounded-lg transition-colors"
+            className="ml-auto p-2 text-slate-400 hover:text-white hover:bg-elevated rounded-lg transition-colors"
           >
             <RefreshCw className="w-5 h-5" />
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-6">
+          <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-accent-violet/20 rounded-xl flex items-center justify-center">
-                <Users className="w-6 h-6 text-accent-violet" />
+              <div className="w-12 h-12 bg-brand/20 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-brand" />
               </div>
               <div>
                 <p className="text-3xl font-bold text-white">{stats.totalUsers}</p>
@@ -99,7 +99,7 @@ const AdminPage = () => {
               </div>
             </div>
           </div>
-          <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-6">
+          <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center">
                 <Award className="w-6 h-6 text-emerald-400" />
@@ -110,7 +110,7 @@ const AdminPage = () => {
               </div>
             </div>
           </div>
-          <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-6">
+          <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-accent-cyan/20 rounded-xl flex items-center justify-center">
                 <BookOpen className="w-6 h-6 text-accent-cyan" />
@@ -123,15 +123,15 @@ const AdminPage = () => {
           </div>
         </div>
 
-        <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl overflow-hidden">
-          <div className="flex border-b border-dark-border overflow-x-auto">
+        <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl overflow-hidden">
+          <div className="flex border-b border-line/20 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-6 py-4 font-medium whitespace-nowrap transition-colors ${
                   activeTab === tab.id
-                    ? 'text-accent-violet border-b-2 border-accent-violet bg-accent-violet/10'
+                    ? 'text-brand border-b-2 border-brand bg-brand/10'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -143,7 +143,7 @@ const AdminPage = () => {
           <div className="p-6">
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="w-8 h-8 border-4 border-accent-violet/30 border-t-accent-violet rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-brand/30 border-t-brand rounded-full animate-spin"></div>
               </div>
             ) : (
               <>
@@ -153,7 +153,7 @@ const AdminPage = () => {
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead>
-                          <tr className="text-left text-slate-400 text-sm border-b border-dark-border">
+                          <tr className="text-left text-slate-400 text-sm border-b border-line/20">
                             <th className="pb-3 pr-4">User</th>
                             <th className="pb-3 pr-4">Course</th>
                             <th className="pb-3 pr-4">Progress</th>
@@ -162,7 +162,7 @@ const AdminPage = () => {
                         </thead>
                         <tbody>
                           {enrollments.slice(0, 5).map((enrollment) => (
-                            <tr key={enrollment.id} className="border-b border-dark-border/50">
+                            <tr key={enrollment.id} className="border-b border-line/10">
                               <td className="py-3 pr-4">
                                 <div>
                                   <p className="text-white font-medium">
@@ -180,7 +180,7 @@ const AdminPage = () => {
                                 <span className={`px-2 py-1 rounded text-sm ${
                                   enrollment.progress === 100
                                     ? 'bg-emerald-500/20 text-emerald-400'
-                                    : 'bg-accent-violet/20 text-accent-violet'
+                                    : 'bg-brand/20 text-brand'
                                 }`}>
                                   {enrollment.progress || 0}%
                                 </span>
@@ -200,7 +200,7 @@ const AdminPage = () => {
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="text-left text-slate-400 text-sm border-b border-dark-border">
+                        <tr className="text-left text-slate-400 text-sm border-b border-line/20">
                           <th className="pb-3 pr-4">Name</th>
                           <th className="pb-3 pr-4">Email</th>
                           <th className="pb-3 pr-4">Admin</th>
@@ -209,7 +209,7 @@ const AdminPage = () => {
                       </thead>
                       <tbody>
                         {users.map((u) => (
-                          <tr key={u.id} className="border-b border-dark-border/50">
+                          <tr key={u.id} className="border-b border-line/10">
                             <td className="py-3 pr-4 text-white font-medium">
                               {u.full_name || 'No name'}
                             </td>
@@ -218,11 +218,11 @@ const AdminPage = () => {
                             </td>
                             <td className="py-3 pr-4">
                               {u.is_admin ? (
-                                <span className="px-2 py-1 bg-accent-violet/20 text-accent-violet rounded text-sm">
+                                <span className="px-2 py-1 bg-brand/20 text-brand rounded text-sm">
                                   Admin
                                 </span>
                               ) : (
-                                <span className="px-2 py-1 bg-dark-bg text-slate-500 rounded text-sm">
+                                <span className="px-2 py-1 bg-base text-slate-500 rounded text-sm">
                                   User
                                 </span>
                               )}
@@ -241,7 +241,7 @@ const AdminPage = () => {
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="text-left text-slate-400 text-sm border-b border-dark-border">
+                        <tr className="text-left text-slate-400 text-sm border-b border-line/20">
                           <th className="pb-3 pr-4">User</th>
                           <th className="pb-3 pr-4">Email</th>
                           <th className="pb-3 pr-4">Course</th>
@@ -251,7 +251,7 @@ const AdminPage = () => {
                       </thead>
                       <tbody>
                         {enrollments.map((enrollment) => (
-                          <tr key={enrollment.id} className="border-b border-dark-border/50">
+                          <tr key={enrollment.id} className="border-b border-line/10">
                             <td className="py-3 pr-4 text-white font-medium">
                               {enrollment.user_full_name || 'Unknown'}
                             </td>
@@ -263,9 +263,9 @@ const AdminPage = () => {
                             </td>
                             <td className="py-3 pr-4">
                               <div className="flex items-center gap-2">
-                                <div className="w-20 h-2 bg-dark-bg rounded-full overflow-hidden">
+                                <div className="w-20 h-2 bg-base rounded-full overflow-hidden">
                                   <div 
-                                    className="h-full bg-gradient-to-r from-accent-violet to-accent-cyan rounded-full"
+                                    className="h-full bg-gradient-to-r from-brand to-accent-cyan rounded-full"
                                     style={{ width: `${enrollment.progress || 0}%` }}
                                   />
                                 </div>
@@ -288,7 +288,7 @@ const AdminPage = () => {
                   <div className="space-y-4">
                     <button
                       onClick={() => navigate('/admin/courses/new')}
-                      className="flex items-center gap-2 px-4 py-2 bg-accent-violet text-white rounded-lg hover:bg-accent-violet/80"
+                      className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand/80"
                     >
                       <Plus className="w-4 h-4" />
                       Create Course
@@ -296,7 +296,7 @@ const AdminPage = () => {
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead>
-                          <tr className="text-left text-slate-400 text-sm border-b border-dark-border">
+                          <tr className="text-left text-slate-400 text-sm border-b border-line/20">
                             <th className="pb-3 pr-4">Course</th>
                             <th className="pb-3 pr-4">Level</th>
                             <th className="pb-3 pr-4">Chapters</th>
@@ -306,12 +306,12 @@ const AdminPage = () => {
                         </thead>
                         <tbody>
                           {courses.map((course) => (
-                            <tr key={course.id} className="border-b border-dark-border/50">
+                            <tr key={course.id} className="border-b border-line/10">
                               <td className="py-3 pr-4">
                                 <p className="text-white font-medium">{course.title}</p>
                               </td>
                               <td className="py-3 pr-4">
-                                <span className="px-2 py-1 bg-dark-bg text-slate-400 rounded text-sm">
+                                <span className="px-2 py-1 bg-base text-slate-400 rounded text-sm">
                                   {course.level || 'Beginner'}
                                 </span>
                               </td>

@@ -8,8 +8,8 @@ const ProgressBar = ({ progress, showLabel = false, size = 'default', color = 'g
   };
 
   const colorClasses = {
-    gradient: 'bg-gradient-to-r from-accent-violet to-accent-cyan',
-    violet: 'bg-accent-violet',
+    gradient: 'bg-gradient-to-r from-brand to-accent-cyan',
+    violet: 'bg-brand',
     cyan: 'bg-accent-cyan',
     emerald: 'bg-emerald-500',
     amber: 'bg-amber-500',
@@ -17,7 +17,7 @@ const ProgressBar = ({ progress, showLabel = false, size = 'default', color = 'g
 
   return (
     <div className="w-full">
-      <div className={`w-full ${heights[size]} bg-dark-bg rounded-full overflow-hidden`}>
+      <div className={`w-full ${heights[size]} bg-base rounded-full overflow-hidden`}>
         <div
           className={`${heights[size]} ${colorClasses[color]} rounded-full transition-all duration-500 ease-out`}
           style={{ width: `${clampedProgress}%` }}

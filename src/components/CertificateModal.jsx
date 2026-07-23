@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { X, Download, Award } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -68,7 +68,7 @@ const CertificateModal = ({ course, onClose }) => {
           <h2 className="text-xl font-bold text-white">Your Certificate</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-dark-border text-slate-400 hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-line/10 text-slate-400 hover:text-white transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -76,14 +76,14 @@ const CertificateModal = ({ course, onClose }) => {
 
         <div 
           ref={certificateRef}
-          className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-8 border-4 border-accent-violet/30 relative overflow-hidden"
+          className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-8 border-4 border-brand/30 relative overflow-hidden"
           style={{ aspectRatio: '1.414 / 1' }}
         >
-          <div className="absolute inset-0 bg-mesh opacity-20"></div>
+          <div className="absolute inset-0 grid-bg opacity-20"></div>
           
           <div className="relative h-full flex flex-col items-center justify-center text-center">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-violet to-accent-cyan flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand to-accent-cyan flex items-center justify-center">
                 <Award className="w-7 h-7 text-white" />
               </div>
               <span className="text-2xl font-bold text-white">Dalal Classes</span>
@@ -91,12 +91,12 @@ const CertificateModal = ({ course, onClose }) => {
 
             <p className="text-accent-cyan text-lg tracking-widest uppercase mb-2">Certificate of Completion</p>
             
-            <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-accent-violet to-transparent my-4"></div>
+            <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-brand to-transparent my-4"></div>
             
             <p className="text-slate-400 mb-2">This certifies that</p>
             <h1 className="text-4xl font-bold text-white mb-4">{studentName}</h1>
             <p className="text-slate-400 mb-2">has successfully completed the course</p>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-accent-violet to-accent-cyan bg-clip-text text-transparent mb-6">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-brand to-accent-cyan bg-clip-text text-transparent mb-6">
               {course.title}
             </h2>
 
@@ -113,21 +113,21 @@ const CertificateModal = ({ course, onClose }) => {
             </div>
 
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-violet to-accent-cyan flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand to-accent-cyan flex items-center justify-center">
                 <Award className="w-4 h-4 text-white" />
               </div>
               <span className="text-xs text-slate-500">Verified Certificate</span>
             </div>
           </div>
 
-          <div className="absolute top-4 right-4 w-20 h-20 border-2 border-accent-violet/20 rounded-full"></div>
+          <div className="absolute top-4 right-4 w-20 h-20 border-2 border-brand/20 rounded-full"></div>
           <div className="absolute bottom-4 left-4 w-16 h-16 border-2 border-accent-cyan/20 rounded-full"></div>
         </div>
 
         <div className="mt-4 flex justify-end">
           <button
             onClick={handleDownload}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-accent-violet to-accent-cyan text-white font-semibold rounded-xl hover:shadow-glow transition-all"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-brand to-accent-cyan text-white font-semibold rounded-xl hover:shadow-glow transition-all"
           >
             <Download className="w-5 h-5" />
             Download PDF

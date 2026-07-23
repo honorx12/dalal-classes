@@ -8,17 +8,17 @@ const ModuleItem = ({ module, isEnrolled, courseId }) => {
   const content = (
     <div className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
       isLocked
-        ? 'bg-dark-bg/50 cursor-not-allowed opacity-60'
+        ? 'bg-base/50 cursor-not-allowed opacity-60'
         : isCompleted
         ? 'bg-emerald-500/10 cursor-pointer hover:bg-emerald-500/20'
-        : 'bg-dark-card/50 cursor-pointer hover:bg-dark-card border border-dark-border hover:border-accent-violet/50'
+        : 'bg-elevated/50 cursor-pointer hover:bg-surface-raised border border-line/20 hover:border-brand/30'
     }`}>
       <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
         isCompleted
           ? 'bg-emerald-500 text-white'
           : isLocked
-          ? 'bg-dark-bg text-slate-500'
-          : 'bg-accent-violet text-white'
+          ? 'bg-base text-slate-500'
+          : 'bg-brand text-white'
       }`}>
         {isCompleted ? (
           <CheckCircle className="w-4 h-4" />

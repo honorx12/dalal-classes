@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { ChevronDown, Lock, CheckCircle, FileQuestion } from 'lucide-react';
+import { ChevronDown, CheckCircle, FileQuestion } from 'lucide-react';
 import ModuleItem from './ModuleItem';
 
-const ChapterAccordion = ({ chapter, courseId, isEnrolled, userId, onQuizClick, allModulesCompleted }) => {
+const ChapterAccordion = ({ chapter, courseId, isEnrolled, onQuizClick }) => {
   const [isOpen, setIsOpen] = useState(chapter.order_index <= 1);
 
   const modules = chapter.modules || [];
@@ -10,14 +10,13 @@ const ChapterAccordion = ({ chapter, courseId, isEnrolled, userId, onQuizClick, 
   const hasQuiz = chapter.has_quiz;
   const quizPassed = chapter.quiz_passed;
   const allChapterModulesCompleted = completedCount === modules.length && modules.length > 0;
-  const canTakeQuiz = allChapterModulesCompleted && hasQuiz && !quizPassed;
   const showQuizButton = allChapterModulesCompleted && hasQuiz;
 
   return (
-    <div className="border border-dark-border rounded-xl overflow-hidden bg-dark-card/40 backdrop-blur-sm">
+    <div className="border border-line/20 rounded-xl overflow-hidden bg-elevated/40 backdrop-blur-sm">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 hover:bg-dark-card/60 transition-colors"
+        className="w-full flex items-center justify-between p-4 hover:bg-elevated/60 transition-colors"
       >
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
@@ -25,7 +24,7 @@ const ChapterAccordion = ({ chapter, courseId, isEnrolled, userId, onQuizClick, 
               ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500'
               : allChapterModulesCompleted
               ? 'bg-accent-cyan/20 text-accent-cyan border-2 border-accent-cyan'
-              : 'bg-dark-bg text-slate-400 border-2 border-slate-600'
+              : 'bg-base text-slate-400 border-2 border-slate-600'
           }`}>
             {allChapterModulesCompleted && quizPassed ? (
               <CheckCircle className="w-5 h-5" />
@@ -67,7 +66,7 @@ const ChapterAccordion = ({ chapter, courseId, isEnrolled, userId, onQuizClick, 
           {showQuizButton && (
             <button
               onClick={() => onQuizClick?.(chapter)}
-              className="w-full mt-3 flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-accent-violet/20 to-accent-cyan/20 border border-accent-violet/30 text-accent-violet hover:from-accent-violet/30 hover:to-accent-cyan/30 transition-all font-medium"
+              className="w-full mt-3 flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-brand/20 to-accent-cyan/20 border border-brand/30 text-brand hover:from-brand/30 hover:to-accent-cyan/30 transition-all font-medium"
             >
               <FileQuestion className="w-5 h-5" />
               Take Chapter Quiz

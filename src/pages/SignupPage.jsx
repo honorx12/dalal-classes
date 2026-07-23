@@ -42,7 +42,7 @@ const SignupPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center py-12 px-4 pt-20">
         <div className="max-w-md w-full text-center">
-          <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-8">
+          <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-8">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-emerald-400" />
             </div>
@@ -50,7 +50,7 @@ const SignupPage = () => {
             <p className="text-slate-400 mb-4">
               Welcome to Dalal Classes, {fullName}! Redirecting you shortly...
             </p>
-            <div className="w-8 h-8 border-4 border-accent-violet/30 border-t-accent-violet rounded-full animate-spin mx-auto"></div>
+            <div className="w-8 h-8 border-4 border-brand/30 border-t-brand rounded-full animate-spin mx-auto"></div>
           </div>
         </div>
       </div>
@@ -59,18 +59,18 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 pt-20">
-      <div className="absolute inset-0 bg-gradient-to-br from-accent-violet/10 via-transparent to-accent-cyan/10"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-brand/10 via-transparent to-accent-cyan/10"></div>
       
       <div className="relative max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-accent-violet to-accent-cyan rounded-2xl mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand to-accent-cyan rounded-2xl mb-4">
             <GraduationCap className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
-          <p className="text-slate-400">Start your learning journey today - it's free!</p>
+          <p className="text-slate-400">Start your learning journey today - it&apos;s free!</p>
         </div>
 
-        <div className="bg-dark-card/60 backdrop-blur-xl border border-dark-border rounded-2xl p-8">
+        <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-8">
           {error && (
             <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3">
               <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
@@ -91,7 +91,7 @@ const SignupPage = () => {
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Enter your full name"
                   required
-                  className="w-full pl-12 pr-4 py-3 bg-dark-bg/50 border border-dark-border rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent-violet focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-base/50 border border-line/20 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -108,7 +108,7 @@ const SignupPage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full pl-12 pr-4 py-3 bg-dark-bg/50 border border-dark-border rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent-violet focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-base/50 border border-line/20 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -125,7 +125,7 @@ const SignupPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a password (min 6 chars)"
                   required
-                  className="w-full pl-12 pr-12 py-3 bg-dark-bg/50 border border-dark-border rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent-violet focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-12 py-3 bg-base/50 border border-line/20 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
                 />
                 <button
                   type="button"
@@ -140,7 +140,7 @@ const SignupPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-accent-violet to-accent-cyan text-white font-semibold rounded-xl hover:shadow-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-gradient-to-r from-brand to-accent-cyan text-white font-semibold rounded-xl hover:shadow-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -156,13 +156,13 @@ const SignupPage = () => {
           <div className="mt-6 text-center">
             <p className="text-slate-400">
               Already have an account?{' '}
-              <Link to="/login" className="text-accent-violet font-semibold hover:text-accent-cyan transition-colors">
+              <Link to="/login" className="text-brand font-semibold hover:text-accent-cyan transition-colors">
                 Sign In
               </Link>
             </p>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-dark-border">
+          <div className="mt-6 pt-6 border-t border-line/20">
             <p className="text-xs text-slate-500 text-center">
               By signing up, you agree to our Terms of Service and Privacy Policy
             </p>

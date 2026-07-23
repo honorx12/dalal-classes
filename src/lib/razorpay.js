@@ -1,6 +1,13 @@
 // src/lib/razorpay.js
+import { getRazorpayKeyId, isRazorpayConfigured } from './env';
 
-const razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
+const razorpayKeyId = getRazorpayKeyId();
+
+/**
+ * Check if Razorpay payments are properly configured
+ * @returns {boolean}
+ */
+export const isRazorpayAvailable = () => isRazorpayConfigured();
 
 export const loadRazorpayScript = () => {
   return new Promise((resolve, reject) => {
@@ -18,6 +25,9 @@ export const loadRazorpayScript = () => {
 };
 
 export const getRazorpayInstance = async () => {
+  if (!isRazorpayConfigured()) {
+    throw new Error('Razorpay is not configured. Please check your environment variables.');
+  }
   await loadRazorpayScript();
   return new window.Razorpay({
     key: razorpayKeyId,

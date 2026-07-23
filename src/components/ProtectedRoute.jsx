@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
     return (
       <div className="min-h-screen flex items-center justify-center pt-16">
         <div className="relative">
-          <div className="w-12 h-12 border-4 border-accent-violet/30 border-t-accent-violet rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-brand/30 border-t-brand rounded-full animate-spin"></div>
         </div>
       </div>
     );

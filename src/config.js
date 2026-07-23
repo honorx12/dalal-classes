@@ -17,7 +17,7 @@ export const CONFIG = {
   },
 
   gradients: {
-    'ai': 'from-accent-violet via-purple-600 to-indigo-700',
+    'ai': 'from-brand via-purple-600 to-indigo-700',
     'ml': 'from-green-500 via-emerald-600 to-teal-700',
     'data': 'from-orange-500 via-red-600 to-pink-700',
     'web': 'from-pink-500 via-purple-600 to-violet-700',

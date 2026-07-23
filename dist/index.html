@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Dalal Classes - Master future skills with expert guidance. Free courses in AI, ML, Data Analytics, Web Development, and Cybersecurity." />
-    <meta name="theme-color" content="#0a0a0f" />
+    <meta name="theme-color" content="#0B0F17" />
     <title>Dalal Classes - Master Future Skills</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-Cj38TI2y.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CqyYtXTY.css">
+    <script>
+      (function () {
+        var t = localStorage.getItem('theme');
+        var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (dark) document.documentElement.classList.add('dark');
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', dark ? '#0B0F17' : '#F8FAFF');
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-B7u4QjJ4.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CaAA6WAm.css">
   </head>
-  <body class="bg-dark-bg text-white font-poppins">
+  <body>
     <div id="root"></div>
   </body>
 </html>
