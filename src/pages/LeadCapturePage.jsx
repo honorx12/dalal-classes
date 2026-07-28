@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Send, 
-  CheckCircle2, 
-  ArrowRight, 
-  Briefcase, 
-  Mail, 
-  User, 
-  MessageSquare,
-  Sparkles
-} from 'lucide-react';
-import LiquidChrome from '../components/LiquidChrome';
-import { supabase } from '../lib/supabaseClient';
+import { useState, lazy, Suspense } from 'react';
+import { Send, CheckCircle2, ArrowRight, Briefcase, Mail, User, MessageSquare, Sparkles } from 'lucide-react';
+
+// Lazy load the heavy LiquidChrome component
+const LiquidChrome = lazy(() => import('../components/LiquidChrome'));
+
+// Simple CSS-based fallback for the background
+const SimpleBackground = () => (
+  <div 
+    className="absolute inset-0 w-full h-full"
+    style={{
+      background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 27, 75, 0.9) 50%, rgba(49, 46, 129, 0.85) 100%)'
+    }}
+  />
+);
 
 // Budget ranges for the dropdown
 const BUDGET_RANGES = [
@@ -22,6 +23,26 @@ const BUDGET_RANGES = [
   { value: '25k-50k', label: '$25,000 - $50,000' },
   { value: '50k-plus', label: '$50,000+' },
 ];
+
+// Simple fade-in animation using CSS instead of Framer Motion
+const FadeIn = ({ children, delay = 0, className = '' }) => (
+  <div 
+    className={`animate-fade-in ${className}`}
+    style={{ 
+      animationDelay: `${delay}ms`,
+      animationFillMode: 'both'
+    }}
+  >
+    {children}
+  </div>
+);
+
+// Optimized form error animation
+const ErrorMessage = ({ children }) => (
+  <p className="text-error text-sm mt-1 animate-slide-down">
+    {children}
+  </p>
+);
 
 const LeadCapturePage = () => {
   const [formData, setFormData] = useState({
@@ -68,6 +89,9 @@ const LeadCapturePage = () => {
     
     try {
       // Store submission in Supabase
+      const { createClient } = await import('../lib/supabaseClient');
+      const supabase = createClient();
+      
       const { error } = await supabase
         .from('leads')
         .insert([{
@@ -93,7 +117,6 @@ const LeadCapturePage = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -102,23 +125,17 @@ const LeadCapturePage = () => {
   if (isSubmitted) {
     return (
       <div className="min-h-screen relative overflow-hidden">
-        <LiquidChrome intensity={0.4} speed={0.25} />
+        <Suspense fallback={<SimpleBackground />}>
+          <LiquidChrome intensity={0.4} speed={0.25} />
+        </Suspense>
         <div className="relative z-10 min-h-screen flex items-center justify-center px-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-md w-full"
-          >
+          <FadeIn className="max-w-md w-full">
             <div className="glass-card p-8 text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-vivid flex items-center justify-center"
-              >
-                <CheckCircle2 className="w-10 h-10 text-white" />
-              </motion.div>
+              <FadeIn delay={200}>
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-vivid flex items-center justify-center animate-scale-in">
+                  <CheckCircle2 className="w-10 h-10 text-white" />
+                </div>
+              </FadeIn>
               <h2 className="font-display text-3xl font-bold text-content mb-4">
                 Thank You!
               </h2>
@@ -130,13 +147,13 @@ const LeadCapturePage = () => {
                   setIsSubmitted(false);
                   setFormData({ name: '', email: '', budget: '', message: '' });
                 }}
-                className="btn-primary inline-flex items-center gap-2 px-6 py-3"
+                className="btn-primary inline-flex items-center gap-2 px-6 py-3 hover:scale-102 transition-transform"
               >
                 Submit Another
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
-          </motion.div>
+          </FadeIn>
         </div>
       </div>
     );
@@ -144,30 +161,25 @@ const LeadCapturePage = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Liquid Chrome Background */}
-      <LiquidChrome intensity={0.4} speed={0.25} />
+      {/* Lazy loaded Liquid Chrome Background */}
+      <Suspense fallback={<SimpleBackground />}>
+        <LiquidChrome intensity={0.4} speed={0.25} />
+      </Suspense>
       
       {/* Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
         <div className="max-w-5xl w-full grid lg:grid-cols-2 gap-12 items-center">
           
           {/* Left side - Hero text */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-elevated/70 backdrop-blur-sm mb-6"
-            >
-              <Sparkles className="w-4 h-4 text-accent-amber" />
-              <span className="text-sm font-medium text-content-secondary">
-                <span className="gradient-text font-bold">New:</span> Premium services available
-              </span>
-            </motion.div>
+          <FadeIn>
+            <FadeIn delay={200}>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-elevated/70 backdrop-blur-sm mb-6">
+                <Sparkles className="w-4 h-4 text-accent-amber" />
+                <span className="text-sm font-medium text-content-secondary">
+                  <span className="gradient-text font-bold">New:</span> Premium services available
+                </span>
+              </div>
+            </FadeIn>
             
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               <span className="text-content">Transform Your</span>
@@ -194,16 +206,12 @@ const LeadCapturePage = () => {
                 No commitment
               </span>
             </div>
-          </motion.div>
+          </FadeIn>
 
           {/* Right side - Lead Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+          <FadeIn delay={200}>
             <div className="glass-card p-8 relative overflow-hidden">
-              {/* Decorative glow */}
+              {/* Decorative glow - simplified */}
               <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand/20 rounded-full blur-3xl" />
               <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-accent-cyan/20 rounded-full blur-3xl" />
               
@@ -233,15 +241,7 @@ const LeadCapturePage = () => {
                         className={`input-field pl-12 ${errors.name ? 'border-error focus:border-error focus:ring-error/20' : ''}`}
                       />
                     </div>
-                    {errors.name && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-error text-sm mt-1"
-                      >
-                        {errors.name}
-                      </motion.p>
-                    )}
+                    {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
                   </div>
 
                   {/* Email Field */}
@@ -261,15 +261,7 @@ const LeadCapturePage = () => {
                         className={`input-field pl-12 ${errors.email ? 'border-error focus:border-error focus:ring-error/20' : ''}`}
                       />
                     </div>
-                    {errors.email && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-error text-sm mt-1"
-                      >
-                        {errors.email}
-                      </motion.p>
-                    )}
+                    {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
                   </div>
 
                   {/* Budget Range Field */}
@@ -298,15 +290,7 @@ const LeadCapturePage = () => {
                         </svg>
                       </div>
                     </div>
-                    {errors.budget && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-error text-sm mt-1"
-                      >
-                        {errors.budget}
-                      </motion.p>
-                    )}
+                    {errors.budget && <ErrorMessage>{errors.budget}</ErrorMessage>}
                   </div>
 
                   {/* Message Field */}
@@ -326,35 +310,21 @@ const LeadCapturePage = () => {
                         className={`input-field pl-12 resize-none ${errors.message ? 'border-error focus:border-error focus:ring-error/20' : ''}`}
                       />
                     </div>
-                    {errors.message && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-error text-sm mt-1"
-                      >
-                        {errors.message}
-                      </motion.p>
-                    )}
+                    {errors.message && <ErrorMessage>{errors.message}</ErrorMessage>}
                   </div>
 
                   {/* Submit Error */}
                   {errors.submit && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="p-3 rounded-lg bg-error/10 border border-error/20 text-error text-sm"
-                    >
+                    <div className="p-3 rounded-lg bg-error/10 border border-error/20 text-error text-sm animate-fade-in">
                       {errors.submit}
-                    </motion.div>
+                    </div>
                   )}
 
-                  {/* Submit Button */}
-                  <motion.button
+                  {/* Submit Button - CSS animations instead of Framer Motion */}
+                  <button
                     type="submit"
                     disabled={isSubmitting}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="btn-primary w-full flex items-center justify-center gap-2 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-primary w-full flex items-center justify-center gap-2 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98] transition-transform"
                   >
                     {isSubmitting ? (
                       <>
@@ -367,7 +337,7 @@ const LeadCapturePage = () => {
                         Send Message
                       </>
                     )}
-                  </motion.button>
+                  </button>
                 </form>
 
                 <p className="text-center text-xs text-content-muted mt-4">
@@ -375,7 +345,7 @@ const LeadCapturePage = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </FadeIn>
         </div>
       </div>
     </div>
