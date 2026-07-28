@@ -5,6 +5,60 @@
       "source": "atxp-dev/cli",
       "sourceType": "github",
       "computedHash": "637ab560afcab48ff91594ca9c25d5eb132509dbf1f1f57292290e800545ce90"
+    },
+    "higgsfield-game-generation": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-game-generation/SKILL.md",
+      "computedHash": "26d470c4a4a0fc3bd829eded4824a774ded04b5281d302f8588e3337c781d652"
+    },
+    "higgsfield-generate": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-generate/SKILL.md",
+      "computedHash": "0e5835e966fcf3a5f3fbbd6e8ec236dc68e7a5444dcf8354e7f3f3d050dac1e0"
+    },
+    "higgsfield-marketplace-cards": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-marketplace-cards/SKILL.md",
+      "computedHash": "dffdd858efc72915e4d9f600626912180e6b9b40a4c745a28d3099ea88c0dfeb"
+    },
+    "higgsfield-product-photoshoot": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-product-photoshoot/SKILL.md",
+      "computedHash": "5dd5a272025e954acbb9beb477a6a1c9200ce4e8155ab8ba8cfe13f444d0da64"
+    },
+    "higgsfield-soul-id": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-soul-id/SKILL.md",
+      "computedHash": "ca60c249db297868051996295d23c24b2477bea78a7dac06401639183ee38fb5"
+    },
+    "higgsfield-video-explainer": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-video-explainer/SKILL.md",
+      "computedHash": "8e240a9803b998ddb82ba5cea0a9706ecac7cbac75fc5ac98f57fa05fe229e2b"
+    },
+    "higgsfield-websites": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-websites/SKILL.md",
+      "computedHash": "3e0eb429ce52c71ac95b16d06c7da6db7e5b0a3157ba32931dbed7913120d746"
+    },
+    "supabase": {
+      "source": "supabase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/supabase/SKILL.md",
+      "computedHash": "19fca56d93a6d212c6373ad921dcaeddf2ff13e3558e6bfd6e63acb063255f86"
+    },
+    "supabase-postgres-best-practices": {
+      "source": "supabase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/supabase-postgres-best-practices/SKILL.md",
+      "computedHash": "768f9a7532780a72165f79c91d71a4bf82abd9ed31045238c2acb40322fc1d0a"
     }
   }
 }
