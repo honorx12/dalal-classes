@@ -101,7 +101,7 @@ const LoginPage = () => {
                     type="button"
                     onClick={handleResend}
                     disabled={resending}
-                    className="mt-2 text-sm text-brand hover:text-accent-cyan font-semibold underline transition-colors disabled:opacity-50"
+                    className="mt-2 text-sm text-brand hover:text-brand-light font-semibold underline transition-colors disabled:opacity-50"
                   >
                     {resending ? 'Resending...' : 'Resend confirmation email'}
                   </button>
@@ -140,7 +140,8 @@ const LoginPage = () => {
                   disabled={loading}
                   aria-invalid={!!fieldErrors.email}
                   aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-                  className="w-full pl-12 pr-4 py-3 bg-base/50 border border-line/20 rounded-xl text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all disabled:opacity-50"
+                  autoComplete="email"
+                  className="w-full pl-12 pr-4 py-3 bg-base/50 border border-line/20 rounded-xl text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all disabled:opacity-50"
                 />
               </div>
               {fieldErrors.email && (
@@ -152,7 +153,7 @@ const LoginPage = () => {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="login-password" className="block text-sm font-medium text-slate-300">
+                <label htmlFor="login-password" className="block text-sm font-medium text-secondary">
                   Password
                 </label>
                 <Link
@@ -177,7 +178,8 @@ const LoginPage = () => {
                   disabled={loading}
                   aria-invalid={!!fieldErrors.password}
                   aria-describedby={fieldErrors.password ? 'password-error' : undefined}
-                  className="w-full pl-12 pr-12 py-3 bg-base/50 border border-line/20 rounded-xl text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all disabled:opacity-50"
+                  autoComplete="current-password"
+                  className="w-full pl-12 pr-12 py-3 bg-base/50 border border-line/20 rounded-xl text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -200,7 +202,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-brand to-accent-cyan text-white font-semibold rounded-xl hover:shadow-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-brand text-white font-semibold rounded-xl hover:bg-brand-dark hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -216,7 +218,7 @@ const LoginPage = () => {
           <div className="mt-6 text-center">
             <p className="text-secondary">
               Don&apos;t have an account?{' '}
-              <Link to="/signup" className="text-brand font-semibold hover:text-accent-cyan transition-colors">
+              <Link to="/signup" className="text-brand font-semibold hover:text-brand-light transition-colors">
                 Sign Up
               </Link>
             </p>

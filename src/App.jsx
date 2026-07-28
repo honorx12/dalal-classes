@@ -23,6 +23,8 @@ const AdminPage = lazy(() => import('./pages/AdminPage'));
 const CourseEditorPage = lazy(() => import('./pages/CourseEditorPage'));
 const PricingPage = lazy(() => import('./pages/PricingPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const LeadCapturePage = lazy(() => import('./pages/LeadCapturePage'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -51,7 +53,7 @@ const AnimatedRoutes = () => {
     <AnimatePresence mode="wait">
       <motion.div key={location.pathname} {...pageTransitionPro}>
         <Routes location={location}>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LeadCapturePage />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/courses/:courseId" element={<CourseDetailPage />} />
@@ -64,7 +66,8 @@ const AnimatedRoutes = () => {
               <ProfilePage />
             </ProtectedRoute>
           } />
-          <Route path="/admin" element={
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/courses" element={
             <AdminRoute>
               <AdminPage />
             </AdminRoute>

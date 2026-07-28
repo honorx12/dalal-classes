@@ -325,7 +325,7 @@ const HomePage = () => {
                 </Link>
               </motion.div>
 
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.08] text-content">
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 mt-4 leading-[1.08] text-content">
                 <SplitWords text="Master the markets." delay={0.05} />
                 <br />
                 <span className="gradient-text-hero">
@@ -333,7 +333,7 @@ const HomePage = () => {
                 </span>
               </h1>
 
-              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-content-secondary mb-8 max-w-lg leading-relaxed">
+              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-content-secondary mb-8 max-w-lg leading-relaxed mt-8">
                 Structured trading education with progress tracking, quizzes, and
                 certificates. Start free — go Pro when you&apos;re ready.
               </motion.p>
