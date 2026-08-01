@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
-import { ArrowLeft, Plus, Trash2, Upload, FileText, Save, X, ChevronDown, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Upload, FileText, Save, X, ChevronDown, ChevronRight, FileQuestion } from 'lucide-react';
+import QuestionBuilder from '../components/admin/QuestionBuilder';
 
 const GRADIENT_PRESETS = [
   { label: 'Violet Cyan', value: 'bg-gradient-to-r from-brand to-accent-cyan' },
@@ -516,6 +517,22 @@ const CourseEditorPage = () => {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Quiz Builder Section */}
+            <div className="bg-elevated/60 backdrop-blur-xl border border-line/20 rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <FileQuestion className="w-6 h-6 text-accent-cyan" />
+                <h2 className="text-xl font-semibold text-white">Chapter Quiz</h2>
+              </div>
+              <QuestionBuilder
+                chapter={chapters.find(c => expandedChapters[c.id]) || chapters[0]}
+                courseId={courseId}
+                onSave={() => {
+                  // Refresh chapters to get updated quiz status
+                  fetchCourse();
+                }}
+              />
             </div>
           </div>
         )}

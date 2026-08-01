@@ -3,7 +3,9 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
 import LessonDiscussions from '../components/LessonDiscussions';
-import { ArrowLeft, CheckCircle, Play, Lock, ChevronLeft, ChevronRight, FileText, Bookmark, BookmarkCheck, Edit3 } from 'lucide-react';
+import CourseOutline from '../components/CourseOutline';
+import QuizModal from '../components/QuizModal';
+import { ArrowLeft, CheckCircle, Play, Lock, ChevronLeft, ChevronRight, FileText, Bookmark, BookmarkCheck, Edit3, FileQuestion, Moon, Sun, Maximize, Minimize } from 'lucide-react';
 
 const LessonPage = () => {
   const { courseId, moduleId } = useParams();
@@ -23,6 +25,9 @@ const LessonPage = () => {
   const [showNoteEditor, setShowNoteEditor] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCompletionAnimation, setShowCompletionAnimation] = useState(false);
+  const [outlineCollapsed, setOutlineCollapsed] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const fetchData = useCallback(async () => {
     if (!courseId || !moduleId) return;
@@ -414,52 +419,17 @@ const LessonPage = () => {
             <LessonDiscussions moduleId={moduleId} user={user} />
           </div>
 
-          {/* Sidebar - Course Content */}
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4 max-h-[calc(100vh-140px)] overflow-y-auto">
-            <h2 className="font-display text-lg font-semibold text-white mb-4">Course Content</h2>
-            <div className="space-y-4">
-              {chapters.map((chapter) => (
-                <div key={chapter.id}>
-                  <div className="text-sm font-medium text-slate-400 px-2 py-1 mb-1">
-                    {chapter.order_index}. {chapter.title}
-                  </div>
-                  <div className="space-y-1">
-                    {chapter.modules.map((module) => {
-                      const isActive = module.id === moduleId;
-                      const isModCompleted = completedModules.has(module.id);
-                      const accessible = isModuleAccessible(module);
-
-                      return (
-                        <Link
-                          key={module.id}
-                          to={accessible ? `/courses/${courseId}/module/${module.id}` : '#'}
-                          onClick={(e) => !accessible && e.preventDefault()}
-                          className={`block px-3 py-2 rounded-lg transition-all ${
-                            isActive
-                              ? 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
-                              : accessible
-                              ? 'text-slate-300 hover:bg-white/5'
-                              : 'text-slate-600 cursor-not-allowed'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2">
-                            {isModCompleted ? (
-                              <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                            ) : accessible ? (
-                              <Play className="w-4 h-4 flex-shrink-0" />
-                            ) : (
-                              <Lock className="w-4 h-4 flex-shrink-0" />
-                            )}
-                            <span className="text-sm truncate">{module.title}</span>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Sidebar - Course Content with new CourseOutline */}
+          <CourseOutline
+            chapters={chapters}
+            courseId={courseId}
+            activeModuleId={moduleId}
+            isEnrolled={!!enrollment}
+            collapsed={outlineCollapsed}
+            onToggleCollapse={() => setOutlineCollapsed(!outlineCollapsed)}
+            onQuizClick={(ch) => setShowQuiz(ch)}
+            completedModules={completedModules}
+          />
         </div>
 
         {/* Navigation */}
@@ -493,6 +463,20 @@ const LessonPage = () => {
           </button>
         </div>
       </div>
+
+      {/* Quiz Modal */}
+      {showQuiz && (
+        <QuizModal
+          chapter={showQuiz}
+          courseId={courseId}
+          onClose={() => setShowQuiz(null)}
+          onComplete={() => {
+            setShowQuiz(null);
+            // Refresh progress after quiz completion
+            fetchData();
+          }}
+        />
+      )}
     </div>
   );
 };

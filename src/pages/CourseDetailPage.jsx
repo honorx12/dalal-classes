@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../store/useAuthStore';
 import { useSubscriptionStore } from '../store/useSubscriptionStore';
 import ChapterAccordion from '../components/ChapterAccordion';
+import CourseOutline from '../components/CourseOutline';
 import QuizModal from '../components/QuizModal';
 import CertificateModal from '../components/CertificateModal';
 import ProgressBar from '../components/ProgressBar';
@@ -329,18 +330,14 @@ const CourseDetailPage = () => {
           {/* Course Content */}
           <div className="card-raised p-6 mb-8">
             <h2 className="font-display text-xl font-bold text-content mb-6">Course Content</h2>
-            <div className="space-y-3">
-              {chapters.map((chapter) => (
-                <ChapterAccordion
-                  key={chapter.id}
-                  chapter={chapter}
-                  courseId={courseId}
-                  isEnrolled={!!enrollment}
-                  userId={user?.id}
-                  onQuizClick={(ch) => setShowQuiz(ch)}
-                />
-              ))}
-            </div>
+            <CourseOutline
+              chapters={chapters}
+              courseId={courseId}
+              isEnrolled={!!enrollment}
+              collapsed={false}
+              onToggleCollapse={() => {}}
+              onQuizClick={(ch) => setShowQuiz(ch)}
+            />
           </div>
 
           {/* Reviews Section */}
