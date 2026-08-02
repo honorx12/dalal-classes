@@ -29,6 +29,15 @@
   --glass-alpha: 0.72;
   --noise-opacity: 0.025;
   color-scheme: light;
+  
+  /* Component-specific tokens */
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(0, 0%, 0%);
+  --skeleton: hsl(0, 0%, 90%);
+  --border: hsl(220, 20%, 90%);
+  --btn-border: hsl(214deg, 31.8%, 91.4%);
+  --input: hsl(220, 20%, 90%);
+  --radius: 0.5rem;
 }
 
 .dark {
@@ -48,6 +57,14 @@
   --glass-alpha: 0.55;
   --noise-opacity: 0.04;
   color-scheme: dark;
+  
+  /* Component-specific tokens for dark mode */
+  --background: hsl(222, 94%, 5%);
+  --foreground: hsl(0, 0%, 100%);
+  --skeleton: hsl(218, 36%, 16%);
+  --border: hsl(220, 20%, 90%);
+  --btn-border: hsl(217deg, 32.6%, 17.5%);
+  --input: hsl(219, 63%, 16%);
 }
 
 * {
@@ -129,6 +146,15 @@ body {
 
   .gradient-text-hero {
     @apply bg-gradient-to-r from-brand via-accent-fuchsia to-accent-cyan bg-clip-text text-transparent;
+    position: relative;
+  }
+
+  .gradient-text-hero span {
+    color: transparent !important;
+  }
+
+  .gradient-text-hero span[style*="color"] {
+    color: transparent !important;
   }
 
   /* Glow Button */
@@ -214,6 +240,12 @@ body {
 
   .nav-link-active {
     @apply text-accent-cyan;
+  }
+  
+  /* Google Button */
+  .g-button {
+    @apply rounded-[var(--radius)] border;
+    border-color: var(--btn-border)
   }
 
   /* Primary Button — glow in dark, layered elevation in light */

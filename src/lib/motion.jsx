@@ -302,11 +302,31 @@ export function TiltCard({ children, maxTilt = 4, className }) {
   )
 }
 
-/**
- * Splits text into per-word animated spans (blurInUp stagger). For hero headlines.
- */
-export function SplitWords({ text, className, wordClassName, delay = 0.03 }) {
+export const blurInUpWithColor = {
+  hidden: { opacity: 0, y: 24, filter: 'blur(8px)' },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    color: 'inherit',
+    transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] },
+  },
+}
+
+export const blurInUpForGradient = {
+  hidden: { opacity: 0, y: 24, filter: 'blur(8px)' },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] },
+  },
+}
+
+export function SplitWords({ text, className, wordClassName, delay = 0.03, isGradient = false }) {
   const words = String(text).split(' ')
+  const variantsToUse = isGradient ? blurInUpForGradient : blurInUpWithColor
+  
   return (
     <motion.span
       className={className}
@@ -316,7 +336,20 @@ export function SplitWords({ text, className, wordClassName, delay = 0.03 }) {
       aria-label={text}
     >
       {words.map((word, i) => (
-        <span key={`${word}-${i}`} className="whitespace-pre" aria-hidden="true"><motion.span variants={blurInUp} className={`inline-block ${wordClassName || ''}`}>{word}</motion.span>{i < words.length - 1 ? ' ' : ''}</span>
+        <span 
+          key={`${word}-${i}`} 
+          className="whitespace-pre" 
+          aria-hidden="true"
+        >
+          <motion.span 
+            variants={variantsToUse} 
+            className={`inline-block ${wordClassName || ''}`}
+            style={isGradient ? {} : { color: 'inherit' }}
+          >
+            {word}
+          </motion.span>
+          {i < words.length - 1 ? ' ' : ''}
+        </span>
       ))}
     </motion.span>
   )

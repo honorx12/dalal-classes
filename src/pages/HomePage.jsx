@@ -304,10 +304,11 @@ const HomePage = () => {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         <HeroBackdrop />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left column - Hero text */}
             <motion.div
-              className="text-left order-2 lg:order-1"
+              className="lg:col-span-7 text-left order-2 lg:order-1"
               variants={staggerContainer(0.1)}
               initial="hidden"
               animate="show"
@@ -325,11 +326,11 @@ const HomePage = () => {
                 </Link>
               </motion.div>
 
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 mt-4 leading-[1.08] text-content">
-                <SplitWords text="Master the markets." delay={0.05} />
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 mt-4 leading-[1.08] text-content max-w-2xl">
+                <SplitWords text="Master the markets." delay={0.05} wordClassName="text-content" />
                 <br />
-                <span className="gradient-text-hero">
-                  <SplitWords text="One platform." delay={0.05} />
+                <span className="gradient-text-hero inline-block mt-2">
+                  <SplitWords text="One platform." delay={0.05} isGradient />
                 </span>
               </h1>
 
@@ -358,8 +359,9 @@ const HomePage = () => {
               </motion.div>
             </motion.div>
 
+            {/* Right column - Learning Path widget */}
             <motion.div
-              className="order-1 lg:order-2"
+              className="lg:col-span-5 order-1 lg:order-2"
               variants={fadeInUp}
               initial="hidden"
               animate="show"
